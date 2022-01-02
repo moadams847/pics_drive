@@ -1,0 +1,44 @@
+{% extends "pics/base.html" %} {% block content %}
+
+<section class="mt-5">
+  <div class="container-lg">
+    <div class="row">
+      <div class="col-md-5">
+        <a class="text-decoration-none text-dark" href="{% url 'pics-home' %}">
+          <i class="bi bi-arrow-left h1"></i
+        ></a>
+
+        <div class="d-flex flex-row flex-wrap">
+          <div class="mt-4 me-4">
+            <a class="text-decoration-none text-dark" href="#">
+              <img
+                class="image-fluid rounded h-100 w-100"
+                src="{{picture.image.url}}"
+                alt="{{ picture.owner.username }}"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <div class="col-md-7">
+        <div class="mt-4 p-5">
+          <h3 class="fs-4 ms-2 rounded-pill bg-light py-2 px-4 d-inline-block">
+            Properties
+          </h3>
+          <p class="ms-3 mt-3">
+            <span class="me-4">Created</span> {{ picture.date_posted }}
+          </p>
+          <p class="ms-3">
+            <span class="me-4">Folder</span> {{ picture.category.name }}
+          </p>
+          <p class="ms-3">
+            <span class="me-4">Owner</span> {{ picture.owner.username }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
