@@ -8,7 +8,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
 class Picture(models.Model):
     image = models.ImageField(default='default.jpg', upload_to='pictures')
     date_posted = models.DateTimeField(auto_now_add=True)
@@ -16,6 +15,6 @@ class Picture(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default='General')
     
     def __str__(self):
-        return self.image.url
+        return self.image.name
     
    

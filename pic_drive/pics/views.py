@@ -41,6 +41,10 @@ class PictureDetailView(DetailView):
     context_object_name = 'picture'
     template_name = 'pics/picture_detail.html'
     
+    def get_context_data(self, **kwargs):
+        context = super(PictureDetailView, self).get_context_data(**kwargs)
+        context['tag'] = self.kwargs.get('name')
+        return context
 class CategoryFolderCreateView(LoginRequiredMixin, CreateView):
     model = Category
     template_name = 'pics/new_folder.html'
@@ -73,12 +77,8 @@ class CategoryFolderUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateVi
     
 class CategoryFolderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Category
-    template_name = 'pics/confirm_delete.html'
+    template_name = 'pics/category_confirm_delete.html'
     success_url = '/'    
-    
-    # https://stackoverflow.com/a/62978825
-    def get_object(self, queryset=None):
-        return Category.objects.get(name=self.kwargs['name']) # instead of self.request.GET or self.request.POST
 
     def test_func(self):
         category = self.get_object()
@@ -86,6 +86,54 @@ class CategoryFolderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteVi
             return True
         return False
     
-    
-    
+    # https://stackoverflow.com/a/62978825
+    def get_object(self, queryset=None):
+        return Category.objects.get(name=self.kwargs['name']) # instead of self.request.GET or self.request.POST
 
+
+class PictureCreateView(LoginRequiredMixin,CreateView):
+    model = Picture
+    template_name = 'pics/new_picture.html'
+    fields = ['image']
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        name = self.kwargs.get('name')
+        form.instance.category = Category.objects.get(name=name)
+        return super().form_valid(form)
+    
+    # https://stackoverflow.com/a/62978825
+    def get_object(self, queryset=None):
+        return Category.objects.get(name=self.kwargs['name']) # instead of self.request.GET or self.request.POST
+
+class PictureUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+   model = Picture
+   template_name = 'pics/new_picture.html'
+   fields = ['image']
+   success_url = '/'
+
+   def form_valid(self, form):
+       form.instance.owner = self.request.user
+       name = self.kwargs.get('name')
+       form.instance.category = Category.objects.get(name=name)
+       return super().form_valid(form)
+    
+   def test_func(self):
+        category = self.get_object()
+        if self.request.user == category.owner:
+            return True
+        return False
+    
+class CategoryPictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Picture
+    template_name = 'pics/picture_confirm_delete.html'
+    success_url = '/'    
+
+    def test_func(self):
+        category = self.get_object()
+        if self.request.user == category.owner:
+            return True
+        return False
+    
+   
