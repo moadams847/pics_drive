@@ -17,4 +17,12 @@ class Picture(models.Model):
     def __str__(self):
         return self.image.name
     
+class DeletePicture(models.Model):
+    image = models.ImageField(default='default.jpg', upload_to='pictures')
+    date_deleted = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default='General')
+    
+    def __str__(self):
+        return self.image.name
+    
    

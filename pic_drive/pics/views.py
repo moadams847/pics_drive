@@ -90,7 +90,6 @@ class CategoryFolderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteVi
     def get_object(self, queryset=None):
         return Category.objects.get(name=self.kwargs['name']) # instead of self.request.GET or self.request.POST
 
-
 class PictureCreateView(LoginRequiredMixin,CreateView):
     model = Picture
     template_name = 'pics/new_picture.html'
