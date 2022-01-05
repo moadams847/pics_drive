@@ -28,10 +28,4 @@ urlpatterns = [
    path('bin/picture/', ListDeletedPicturesView.as_view(), name='recycled-picture'),
    path('bin/picture/<int:pk>/detail', DeletedPictureDetailView.as_view(), name='deletedPicture-detail'),
    path('bin/picture/<int:pk>/delete', DeletedPictureDeleteView.as_view(), name='deletedPicture-delete'),
-
-#  path('folder/picture/<str:name>/new/picture/', PictureCreateView.as_view(), name='new-picture'),
-#    path('folder/picture/<int:pk>/update/', PictureUpdateView.as_view(), name='update-picture'),
-
-   
-   
 ]

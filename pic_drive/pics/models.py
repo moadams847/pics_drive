@@ -14,7 +14,8 @@ class Picture(models.Model):
     image = models.ImageField(upload_to='pictures')
     date_posted = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default='General')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default='General', 
+                                 related_name = 'category')
     
     def __str__(self):
         return self.image.name

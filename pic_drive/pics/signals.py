@@ -14,3 +14,4 @@ def log_deleted_pictures(sender, instance, using, **kwargs):
     d.image = instance.image
     d.owner = instance.owner
     d.save() 
+    
