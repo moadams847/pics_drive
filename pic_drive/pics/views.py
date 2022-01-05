@@ -114,8 +114,6 @@ class PictureUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
    fields = ['image']
    success_url = '/'
 
-   
-    
    def test_func(self):
         picture = self.get_object()
         if self.request.user == picture.owner:
