@@ -11,10 +11,7 @@
         <div class="d-flex flex-row flex-wrap">
           {% for picture in deleted_pictures %}
           <div class="mt-4 me-4">
-            <a
-              class="text-decoration-none text-dark"
-              href="{% url 'deletedPicture-detail' picture.id %}"
-            >
+            <a class="text-decoration-none text-dark" href="#">
               <img
                 class="image-fluid rounded"
                 src="{{picture.image.url}}"

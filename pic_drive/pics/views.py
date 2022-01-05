@@ -110,14 +110,11 @@ class PictureCreateView(LoginRequiredMixin,CreateView):
 class PictureUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
    model = Picture
    template_name = 'pics/new_picture.html'
+   context_object_name = 'picture'
    fields = ['image']
    success_url = '/'
 
-   def form_valid(self, form):
-       form.instance.owner = self.request.user
-       name = self.kwargs.get('name')
-       form.instance.category = Category.objects.get(name=name)
-       return super().form_valid(form)
+   
     
    def test_func(self):
         picture = self.get_object()
