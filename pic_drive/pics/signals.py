@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_delete
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-from . models import Picture, Category, DeletePicture
+from . models import Picture, Category, DeletePicture, DeletedFolder
 import datetime
 
 
@@ -15,3 +15,4 @@ def log_deleted_pictures(sender, instance, using, **kwargs):
     d.owner = instance.owner
     d.save() 
     
+
