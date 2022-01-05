@@ -9,10 +9,9 @@ from .views import (
                     CategoryFolderDeleteView,
                     PictureCreateView,
                     PictureUpdateView,
-                    # CategoryPictureDeleteView,
                     ListDeletedPicturesView,
                     DeletedPictureDetailView,
-                  DeletedPictureDeleteView,
+                    DeletedPictureDeleteView,
                     )
 
 urlpatterns = [
