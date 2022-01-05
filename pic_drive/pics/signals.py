@@ -12,4 +12,5 @@ def log_deleted_pictures(sender, instance, using, **kwargs):
     d.date_deleted = datetime.datetime.now() 
     d.category = instance.category
     d.image = instance.image
+    d.owner = instance.owner
     d.save() 

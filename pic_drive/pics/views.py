@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404, reverse 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     ListView,
     DetailView,
@@ -7,7 +8,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Picture, Category
+from .models import Picture, Category, DeletePicture
 
 
 class CategoryListView(LoginRequiredMixin, ListView):
@@ -119,20 +120,62 @@ class PictureUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
        return super().form_valid(form)
     
    def test_func(self):
-        category = self.get_object()
-        if self.request.user == category.owner:
+        picture = self.get_object()
+        if self.request.user == picture.owner:
             return True
         return False
-    
-class CategoryPictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Picture
-    template_name = 'pics/picture_confirm_delete.html'
-    success_url = '/'    
 
+    # class approach
+# class PictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+#     model = Picture
+#     template_name = 'pics/picture_confirm_delete.html'
+#     success_url = '/'    
+
+#     def test_func(self):
+#         picture = self.get_object()
+#         if self.request.user == picture.owner:
+#             return True
+#         return False
+
+@login_required
+def PictureDeleteView(request, pk):
+    picture = Picture.objects.get(id=pk)  
+    if request.method == 'POST':
+        if picture.owner == request.user:
+            picture.delete()
+            return redirect('/')
+    
+    context = {'picture': picture}
+    return render (request, 'pics/picture_confirm_delete.html', context)
+    
+class ListDeletedPicturesView(LoginRequiredMixin, ListView):
+    model = DeletePicture
+    context_object_name = 'deleted_pictures'
+    ordering = ['-date_deleted']
+    template_name = 'pics/list_deleted_pictures.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ListDeletedPicturesView, self).get_context_data(**kwargs)
+        context['deleted_pictures'] = context['deleted_pictures'].filter(owner=self.request.user)
+        return context
+    
+class DeletedPictureDetailView(LoginRequiredMixin, DetailView):
+    model = DeletePicture
+    context_object_name = 'picture'
+    template_name = 'pics/deleted_picture_detail.html'
+    
+class DeletedPictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = DeletePicture
+    template_name = 'pics/deleted_picture_confirm_delete.html'
+    context_object_name = 'picture'
+    success_url = '/'  
+    
     def test_func(self):
-        category = self.get_object()
-        if self.request.user == category.owner:
+        picture = self.get_object()
+        if self.request.user == picture.owner:
             return True
         return False
-    
    
+ 
+
+    

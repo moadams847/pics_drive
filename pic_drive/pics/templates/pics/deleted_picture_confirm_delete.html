@@ -7,17 +7,25 @@
         <a class="text-decoration-none text-dark" href="{% url 'pics-home' %}">
           <i class="bi bi-arrow-left h1"></i
         ></a>
-
         <div class="d-flex flex-row flex-wrap">
           <div class="content-section">
-            <form method="POST">
+            <form
+              action="{% url 'deletedPicture-delete' picture.id %}"
+              method="POST"
+            >
               {% csrf_token %}
               <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Folder Name</legend>
-                {{ form|crispy }}
+                <legend class="border-bottom mb-4">Delete Picture</legend>
+                <h2>
+                  Are you sure you want to delete the picture?
+                  <span class="bg-info">{{ picture.image.name }}</span>
+                </h2>
               </fieldset>
               <div class="form-group">
-                <button class="btn btn-dark" type="submit">Create</button>
+                <button class="btn btn-danger" type="submit">
+                  Yes, Delete
+                </button>
+                <a class="btn btn-dark" href="{% url 'pics-home'  %}">Cancel</a>
               </div>
             </form>
           </div>

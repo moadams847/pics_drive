@@ -9,12 +9,12 @@
         ></a>
         <div class="d-flex flex-row flex-wrap">
           <div class="content-section">
-            <form method="POST">
+            <form action="{% url 'delete-picture' picture.id %}" method="POST">
               {% csrf_token %}
               <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Delete Folder</legend>
+                <legend class="border-bottom mb-4">Delete Picture</legend>
                 <h2>
-                  Are you sure you want to delete the Folder
+                  Are you sure you want to delete the picture?
                   <span class="bg-info">{{ picture.image.name }}</span>
                 </h2>
               </fieldset>
