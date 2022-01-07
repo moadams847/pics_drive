@@ -24,7 +24,7 @@ class RegisterPage(FormView):
             return redirect('pics-home')
         return super(RegisterPage, self).get(*args, **kwargs)
 
-
+# functional veiew for user registration
 # def register(request):
 #     if request.method == 'POST':
 #         form = UserRegisterForm(request.POST)
