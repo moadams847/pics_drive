@@ -20,7 +20,16 @@ class Picture(models.Model):
     def __str__(self):
         return self.image.name
     
-#model for the deleted pictures    
+
+# for recycling bin
+class DeletedFolder(models.Model):
+    name = models.CharField(max_length=300)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_deleted = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
+    
 class DeletePicture(models.Model):
     image = models.ImageField(default='default.jpg', upload_to='pictures')
     date_deleted = models.DateTimeField(auto_now_add=True)
@@ -30,10 +39,3 @@ class DeletePicture(models.Model):
     def __str__(self):
         return self.image.name
     
-class DeletedFolder(models.Model):
-    name = models.CharField(max_length=300, unique=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(auto_now_add=True)
-    
-    def __str__(self):
-        return self.name

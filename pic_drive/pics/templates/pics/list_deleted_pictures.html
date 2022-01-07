@@ -3,14 +3,14 @@
 <section class="mt-5">
   <div class="container-lg">
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-md-6">
         <a class="text-decoration-none text-dark" href="{% url 'pics-home' %}">
           <i class="bi bi-arrow-left h1"></i
         ></a>
 
         <div class="d-flex flex-row flex-wrap">
           {% for picture in deleted_pictures %}
-          <div class="mt-4 me-4">
+          <div class="me-4">
             <a
               class="text-decoration-none text-dark"
               href="{% url 'deletedPicture-detail' picture.id %}"
@@ -23,28 +23,25 @@
             </a>
           </div>
           {% empty %}
-          <h1>Bin Empty</h1>
+          <h1></h1>
           {% endfor %}
         </div>
       </div>
       <!--  -->
-      <!-- <div class="col-md-4">
-        <div class="mt-5 p-2">
-          <a class="text-decoration-none text-dark" href="#">
-            <span class="fs-4 ms-2 rounded-pill bg-light py-2 px-4">
-              <i class="fas fa-trash-restore h3"></i> Restore
-            </span>
-          </a>
+      <div class="col-md-6">
+        <div class="d-flex flex-row flex-wrap">
+          {% for folder in deleted_folders %}
+          <div class="me-5 mt-5">
+            <a class="text-decoration-none text-dark" href="#">
+              <i class="fas fa-folder fa-7x"></i>
+              <span class="text-center d-block">{{folder.name}}</span>
+            </a>
+          </div>
+          {% empty %}
+          <h1></h1>
+          {% endfor %}
         </div>
-
-        <div class="mt-2 p-2">
-          <a class="text-decoration-none text-dark" href="#">
-            <span class="fs-4 ms-2 rounded-pill bg-light py-2 px-4">
-              <i class="fas fa-trash h3"></i> Empty Bin
-            </span>
-          </a>
-        </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </section>

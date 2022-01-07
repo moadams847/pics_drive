@@ -16,3 +16,11 @@ def log_deleted_pictures(sender, instance, using, **kwargs):
     d.save() 
     
 
+@receiver(pre_delete, sender=Category)
+def log_deleted_folders(sender, instance, using, **kwargs):
+    d = DeletedFolder()
+    d.id = instance.id
+    d.date_deleted = datetime.datetime.now() 
+    d.name = instance.name
+    d.author = instance.author
+    d.save()

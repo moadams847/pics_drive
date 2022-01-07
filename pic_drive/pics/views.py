@@ -8,7 +8,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from .models import Picture, Category, DeletePicture
+from .models import Picture, Category, DeletePicture, DeletedFolder
 
 
 class CategoryListView(LoginRequiredMixin, ListView):
@@ -152,6 +152,7 @@ class ListDeletedPicturesView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(ListDeletedPicturesView, self).get_context_data(**kwargs)
         context['deleted_pictures'] = context['deleted_pictures'].filter(owner=self.request.user)
+        context['deleted_folders'] = DeletedFolder.objects.all() 
         return context
     
 class DeletedPictureDetailView(LoginRequiredMixin, DetailView):

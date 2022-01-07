@@ -63,13 +63,15 @@
           <ul class="navbar-nav me-3 mb-2 mb-lg-0">
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="#">Upload</a>
+              <a class="nav-link" href="#"></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">User</a>
+              <a class="nav-link" href=""> {{ user.username }} </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Bin</a>
+              <a class="nav-link" href="{% url 'recycled-picture' %}"
+                >Recycle Bin</a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Logout</a>
