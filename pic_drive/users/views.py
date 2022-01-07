@@ -14,6 +14,8 @@ class RegisterPage(FormView):
     def form_valid(self, form):
         user = form.save()
         if user is not None:
+            username = form.cleaned_data.get('username')
+            messages.info(self.request, f'Account created for {username}!')
             return redirect('login')
         return super(RegisterPage, self).form_valid(form)
 
