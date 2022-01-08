@@ -9,7 +9,7 @@ from .views import (
                     CategoryFolderDeleteView,
                     PictureCreateView,
                     PictureUpdateView,
-                    CategoryPictureDeleteView
+                    PictureDeleteView
                     )
 
 urlpatterns = [
@@ -22,7 +22,7 @@ urlpatterns = [
    path('folder/<str:name>/delete/', CategoryFolderDeleteView.as_view(), name='delete-folder'),
    path('folder/picture/<str:name>/new/picture/', PictureCreateView.as_view(), name='new-picture'),
    path('folder/picture/<int:pk>/update/', PictureUpdateView.as_view(), name='update-picture'),
-   path('folder/picture/<int:pk>/delete/', CategoryPictureDeleteView.as_view(), name='delete-picture'),
+   path('folder/picture/<int:pk>/delete/', PictureDeleteView.as_view(), name='delete-picture'),
 
 
 

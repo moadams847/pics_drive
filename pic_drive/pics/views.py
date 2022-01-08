@@ -124,7 +124,7 @@ class PictureUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
     
-class CategoryPictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Picture
     template_name = 'pics/picture_confirm_delete.html'
     success_url = '/'    
