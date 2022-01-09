@@ -3,7 +3,7 @@
 <section class="mt-5">
   <div class="container-lg">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <a class="text-decoration-none text-dark" href="{% url 'pics-home' %}">
           <i class="bi bi-arrow-left h1"></i
         ></a>
@@ -13,7 +13,7 @@
           <div class="mt-4 me-4">
             <a
               class="text-decoration-none text-dark"
-              href="{% url 'detail-pics' picture.id %}"
+              href="{% url 'bin-detail' picture.id %}"
             >
               <img
                 class="image-fluid rounded"
@@ -28,43 +28,22 @@
         </div>
       </div>
       <!--  -->
-      <div class="col-md-4">
-        <div class="mt-4 p-2">
-          <a
-            class="text-decoration-none text-dark"
-            href="{% url 'update-folder' tag %}"
-          >
-            <span class="fs-4 ms-2 rounded-pill bg-light py-2 px-4">
-              <i class="fas fa-user-edit h3"></i> Edit Folder Name
-            </span>
-          </a>
-        </div>
-
-        <div class="mt-2 p-2">
-          <a
-            class="text-decoration-none text-dark"
-            href="{% url 'new-picture' tag %}"
-          >
-            <span class="fs-4 ms-2 rounded-pill bg-light py-2 px-4">
-              <i class="fas fa-plus h3"></i> Upload Picture
-            </span>
-          </a>
-        </div>
-
+      <div class="col-md-6">
         <div class="mt-2 p-2">
           <a
             class="text-decoration-none text-dark"
             href="{% url 'delete-folder' tag %}"
           >
             <span class="fs-4 ms-2 rounded-pill bg-light py-2 px-4">
-              <i class="fas fa-trash h3"></i> Delete Folder
+              <i class="fas fa-trash-restore h3"></i> Restore Folder
             </span>
           </a>
         </div>
-        <div class="mt-2 p-2 text-center">
-          <a class="text-decoration-none text-dark" href="{% url 'bin-pics' %}">
-            <span class="me-5"><i class="bi bi-trash fa-6x"></i></span>
-            <span class="d-block me-5">Recyle Bin</span>
+        <div class="mt-2 p-2">
+          <a class="text-decoration-none text-dark" href="#">
+            <span class="fs-4 ms-2 rounded-pill bg-light py-2 px-4">
+              <i class="fas fa-trash h3"></i> Delete Folder Permanently
+            </span>
           </a>
         </div>
       </div>

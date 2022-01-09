@@ -1,13 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import timezone
+import datetime
 
 class SoftDeleteModel(models.Model):
 
     deleted_at = models.DateTimeField(null=True, default=None)
 
     def soft_delete(self):
-        self.deleted_at = timezone.now()
+        self.deleted_at = datetime.datetime.now()
         self.save()
 
     def restore(self):
