@@ -4,7 +4,7 @@
   <div class="container-lg">
     <div class="row">
       <div class="col-md-5">
-        <!-- <a class="text-decoration-none text-dark" href="{% url 'pics-home' %}">
+        <!-- <a class="text-decoration-none text-dark" href="{% url 'bin-pics' %}">
           <i class="bi bi-arrow-left h1"></i
         ></a> -->
         <div class="d-flex flex-column">
@@ -44,12 +44,12 @@
 
           <!--  -->
           <div class="d-flex flex-row mt-5">
-            <a class="text-decoration-none text-dark m-1" href="{% url 'update-picture' picture.id %}">
+            <a class="text-decoration-none text-dark m-1" href="{% url 'restore-picture' picture.id %}">
               <span class="fs-6 rounded-pill bg-light py-2 px-4">
                 <i class="fas fa-trash-restore h3"></i> Restore Picture
               </span>
             </a>
-            <a class="text-decoration-none text-dark m-1" href="{% url 'delete-picture' picture.id %}">
+            <a class="text-decoration-none text-dark m-1" href="{% url 'perm-delete-picture' picture.id %}">
               <span class="fs-6 rounded-pill bg-light py-2 px-4">
                 <i class="fas fa-trash h3"></i> Delete Picture Permanently
               </span>

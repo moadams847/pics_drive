@@ -9,7 +9,6 @@ from django.views.generic import (
 )
 from .models import Picture, Category
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
 
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
@@ -22,6 +21,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
         context['categories'] = context['categories'].filter(Q(author=self.request.user) & 
                                                              Q(deleted_at=None))
         return context
+    
 
 class PictureListView(ListView):
     model = Picture
@@ -37,22 +37,24 @@ class PictureListView(ListView):
         context = super(PictureListView, self).get_context_data(**kwargs)
         context['tag'] = self.kwargs.get('name')
         return context
+    
 
 # recycle bin logic ------------------------------------------
-class DeletedCategoryListView(LoginRequiredMixin, ListView):
+class SoftDeletedCategoryListView(LoginRequiredMixin, ListView):
     model = Category
     context_object_name = 'categories'
     ordering = ['-date_created']
     template_name = 'pics/deleted_folder_list.html'    
     
     def get_context_data(self, **kwargs):
-        context = super(DeletedCategoryListView, self).get_context_data(**kwargs)
+        context = super(SoftDeletedCategoryListView, self).get_context_data(**kwargs)
         context['categories'] = context['categories'].filter(Q(author=self.request.user) & 
                                                              ~Q(deleted_at=None))
         
         context['deleted_pictures'] = Picture.objects.filter(~Q(deleted_at=None))
         return context
-class DeletedPictureListView(ListView):
+    
+class SoftDeletedPictureListView(ListView):
     model = Picture
     context_object_name = 'pictures'
     ordering = ['-date_posted']
@@ -63,21 +65,22 @@ class DeletedPictureListView(ListView):
         return Picture.objects.filter(Q(category=tag) & ~Q(deleted_at =None)).order_by('-date_posted') 
     
     def get_context_data(self, **kwargs):
-        context = super(DeletedPictureListView, self).get_context_data(**kwargs)
+        context = super(SoftDeletedPictureListView, self).get_context_data(**kwargs)
         context['tag'] = self.kwargs.get('name')
         return context
 
-class DeletedPictureDetailView(DetailView):
+class SoftDeletedPictureDetailView(DetailView):
     model = Picture
     context_object_name = 'picture'
     template_name = 'pics/deleted_picture_detail.html'
     
     def get_context_data(self, **kwargs):
-        context = super(DeletedPictureDetailView, self).get_context_data(**kwargs)
+        context = super(SoftDeletedPictureDetailView, self).get_context_data(**kwargs)
         context['tag'] = self.kwargs.get('name')
         return context
-# ----------------------------------------------------------------
     
+
+# ----------------------------------------------------------------
 class PictureDetailView(DetailView):
     model = Picture
     context_object_name = 'picture'
@@ -117,7 +120,7 @@ class CategoryFolderUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateVi
             return True
         return False
     
-class CategoryFolderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class CategoryFolderSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Category
     template_name = 'pics/category_confirm_delete.html'
     success_url = '/'    
@@ -130,6 +133,47 @@ class CategoryFolderDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteVi
        self.object = self.get_object()
        success_url = self.get_success_url()
        self.object.soft_delete()
+       return HttpResponseRedirect(success_url)
+
+    def test_func(self):
+        category = self.get_object()
+        if self.request.user == category.author:
+            return True
+        return False
+    
+    # https://stackoverflow.com/a/62978825
+    def get_object(self, queryset=None):
+        return Category.objects.get(name=self.kwargs['name']) # instead of self.request.GET or self.request.POST
+
+class CategoryFolderPermanentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Category
+    template_name = 'pics/category_confirm_delete.html'
+    success_url = '/'    
+
+    def test_func(self):
+        category = self.get_object()
+        if self.request.user == category.author:
+            return True
+        return False
+    
+    # https://stackoverflow.com/a/62978825
+    def get_object(self, queryset=None):
+        return Category.objects.get(name=self.kwargs['name']) # instead of self.request.GET or self.request.POST
+
+
+class CategoryFolderRestoreView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Category
+    template_name = 'pics/category_confirm_restore.html'
+    success_url = '/'    
+
+    def delete(self, request, *args, **kwargs):
+       """
+       Call the delete() method on the fetched object and then redirect to the
+       success URL.
+       """
+       self.object = self.get_object()
+       success_url = self.get_success_url()
+       self.object.restore()
        return HttpResponseRedirect(success_url)
 
     def test_func(self):
@@ -176,7 +220,7 @@ class PictureUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
     
-class PictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PictureSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Picture
     template_name = 'pics/picture_confirm_delete.html'
     success_url = '/'    
@@ -191,6 +235,38 @@ class PictureDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
        self.object.soft_delete()
        return HttpResponseRedirect(success_url)
 
+    def test_func(self):
+        category = self.get_object()
+        if self.request.user == category.owner:
+            return True
+        return False
+    
+class PictureRestoreView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Picture
+    template_name = 'pics/picture_confirm_restore.html'
+    success_url = '/'    
+    
+    def delete(self, request, *args, **kwargs):
+       """
+       Call the delete() method on the fetched object and then redirect to the
+       success URL.
+       """
+       self.object = self.get_object()
+       success_url = self.get_success_url()
+       self.object.restore()
+       return HttpResponseRedirect(success_url)
+
+    def test_func(self):
+        category = self.get_object()
+        if self.request.user == category.owner:
+            return True
+        return False
+    
+class PicturePermanentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Picture
+    template_name = 'pics/picture_confirm_delete.html'
+    success_url = '/'    
+    
     def test_func(self):
         category = self.get_object()
         if self.request.user == category.owner:
