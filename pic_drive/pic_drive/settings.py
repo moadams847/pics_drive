@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-6+)l9^gc%r*el-41n++(#)@el$#ovv3eb^h9-b1^fv(&xk-5uf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['picsdrive.herokuapp.com']
 
 
 # Application definition
